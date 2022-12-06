@@ -13,11 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+
 from django.contrib import admin
 from django.urls import path
 
-from account.views import RegisterUserView, DeleteUserView
-
+from account.views import RegisterUserView, DeleteUserView,check_auth
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 """=============================Swagger docs============================="""
 from drf_yasg import openapi
@@ -39,4 +44,7 @@ urlpatterns = [
     path('docs/', swagger_view.with_ui('swagger',cache_timeout=0)),
     path('account/register/', RegisterUserView.as_view()),
     path('account/delete/<str:email>', DeleteUserView.as_view()),
+    path('account/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('account/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('account/check-auth/', check_auth),
 ]
